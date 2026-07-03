@@ -1,0 +1,16 @@
+{
+  "name": "power-automate-flow-troubleshooter",
+  "description": "Power Automate flow run troubleshooting with explicit list and diagnose modes.",
+  "version": "0.1.0",
+  "author": {
+    "name": "Power Automate Flow Troubleshooter Private Preview"
+  },
+  "homepage": "https://github.com/nandrespersonal/power-automate-flow-troubleshooter",
+  "keywords": [
+    "power-automate",
+    "flow-runs",
+    "troubleshooting",
+    "diagnostics"
+  ],
+  "repository": "https://github.com/nandrespersonal/power-automate-flow-troubleshooter"
+}

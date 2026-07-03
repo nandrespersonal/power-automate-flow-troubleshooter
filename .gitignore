@@ -1,0 +1,23 @@
+# OS/editor
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+
+# Logs/temp
+*.log
+tmp/
+temp/
+
+# Package artifacts
+*.zip
+node_modules/
+
+# Local-only source references copied from project-specific repos.
+# These may contain proprietary tenant, environment, flow, run, or URL details.
+source-extract/
+
+# User-specific flow profiles must stay local.
+local-flow-profiles.*
+*.local.json
+*.local.md

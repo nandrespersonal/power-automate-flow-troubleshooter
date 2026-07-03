@@ -1,0 +1,15 @@
+{
+  "name": "power-automate-flow-troubleshooter",
+  "version": "0.1.0",
+  "description": "Private-preview PowerShell-backed Power Automate flow run troubleshooting with list and diagnose modes.",
+  "private": true,
+  "type": "module",
+  "keywords": [
+    "power-automate",
+    "flow-runs",
+    "troubleshooting",
+    "diagnostics"
+  ],
+  "author": "Power Automate Flow Troubleshooter Private Preview",
+  "license": "MIT"
+}

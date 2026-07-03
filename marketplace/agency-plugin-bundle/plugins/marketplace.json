@@ -1,0 +1,31 @@
+{
+  "name": "power-automate-flow-troubleshooter-marketplace",
+  "metadata": {
+    "description": "Power Automate Flow Troubleshooter plugin marketplace package",
+    "version": "0.0.1"
+  },
+  "owner": {
+    "name": "Power Automate Flow Troubleshooter Private Preview"
+  },
+  "plugins": [
+    {
+      "name": "power-automate-flow-troubleshooter",
+      "source": "./power-automate-flow-troubleshooter",
+      "strict": true,
+      "version": "0.1.0",
+      "description": "A Power Automate flow run troubleshooting plugin with explicit list and diagnose modes for operator-guided run analysis.",
+      "author": {
+        "name": "Power Automate Flow Troubleshooter Private Preview"
+      },
+      "keywords": [
+        "power-automate",
+        "flow-runs",
+        "troubleshooting",
+        "run-history",
+        "operator-tools",
+        "diagnostics"
+      ],
+      "category": "operations"
+    }
+  ]
+}
