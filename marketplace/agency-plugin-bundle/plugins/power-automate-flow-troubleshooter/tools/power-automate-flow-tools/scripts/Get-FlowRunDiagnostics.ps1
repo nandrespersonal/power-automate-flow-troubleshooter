@@ -110,9 +110,12 @@ function Invoke-OptionalFlowGet {
 
 function ConvertTo-SafeAction {
     param(
-        [Parameter(Mandatory = $true)]
         $Action
     )
+
+    if ($null -eq $Action) {
+        return $null
+    }
 
     $errorObject = $Action.properties.error
     $safeError = $null
@@ -148,7 +151,9 @@ function Get-NonSucceededActions {
         [object[]]$Actions
     )
 
-    return @($Actions | Where-Object { $_.properties.status -notin @('Succeeded', 'Skipped') })
+    return @($Actions | Where-Object {
+        $null -ne $_ -and $_.properties.status -notin @('Succeeded', 'Skipped')
+    })
 }
 
 function Get-RepetitionDiagnostics {
@@ -172,7 +177,7 @@ function Get-RepetitionDiagnostics {
         @{ RepetitionSegment = 'scopeRepetitions'; Label = 'scope repetition' }
     )
 
-    foreach ($action in $Actions) {
+    foreach ($action in @($Actions | Where-Object { $null -ne $_ -and $_.name })) {
         foreach ($shape in $endpointShapes) {
             $segment = $shape.RepetitionSegment
             $label = $shape.Label
@@ -183,17 +188,24 @@ function Get-RepetitionDiagnostics {
                 continue
             }
 
-            $repetitions = @($repResponse.value) | Select-Object -First $Limit
+            $repetitions = @($repResponse.value | Where-Object { $null -ne $_ }) | Select-Object -First $Limit
             $interestingRepetitions = @($repetitions | Where-Object {
-                $_.properties.status -notin @('Succeeded', 'Skipped') -or
-                $_.properties.error -or
-                $_.properties.code
+                $null -ne $_ -and
+                (
+                    $_.properties.status -notin @('Succeeded', 'Skipped') -or
+                    $_.properties.error -or
+                    $_.properties.code
+                )
             })
 
             foreach ($rep in $interestingRepetitions) {
                 $childRoute = "$BaseUrl/runs/$RunId/actions/$($action.name)/$segment/$($rep.name)/actions`?api-version=2016-11-01"
                 $childResponse = Invoke-OptionalFlowGet -Route $childRoute
-                $children = if ($childResponse -and $childResponse.value) { @($childResponse.value) } else { @() }
+                $children = if ($childResponse -and $childResponse.value) {
+                    @($childResponse.value | Where-Object { $null -ne $_ })
+                } else {
+                    @()
+                }
                 $nonSucceededChildren = Get-NonSucceededActions -Actions $children
 
                 $findings += [pscustomobject]@{
@@ -205,7 +217,7 @@ function Get-RepetitionDiagnostics {
                     RepetitionCode       = $rep.properties.code
                     RepetitionError      = if ($rep.properties.error) { $rep.properties.error } else { $null }
                     ChildActionCount     = @($children).Count
-                    NonSucceededChildren = @($nonSucceededChildren | ForEach-Object { ConvertTo-SafeAction -Action $_ })
+                    NonSucceededChildren = @($nonSucceededChildren | Where-Object { $null -ne $_ } | ForEach-Object { ConvertTo-SafeAction -Action $_ })
                 }
             }
         }
